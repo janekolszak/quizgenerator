@@ -33,11 +33,12 @@ if (env.name !== 'production') {
 }
 
 app.on('ready', function () {
-    setApplicationMenu();
+    // setApplicationMenu();
 
     var mainWindow = createWindow('main', {
-        width: 1000,
-        height: 600
+        width: 400,
+        height: 200,
+        // resizable: false,
     });
 
     mainWindow.loadURL(url.format({
@@ -45,6 +46,9 @@ app.on('ready', function () {
         protocol: 'file:',
         slashes: true
     }));
+
+    mainWindow.setMenu(null);
+
 
     if (env.name === 'development') {
         mainWindow.openDevTools();
