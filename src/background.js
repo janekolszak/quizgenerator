@@ -25,6 +25,11 @@ ipcMain.on('close-main-window', (event, arg) => {
     app.quit();
 })
 
+ipcMain.on('gen-tests', (event, inDir, outDir, numTsts) => {
+    console.log(inDir, outDir, numTsts);
+    event.sender.send('gen-tests-done', 'Tests generated')
+})
+
 
 
 var mainWindow;
@@ -55,10 +60,10 @@ app.on('ready', function() {
         height: 250,
         minheight: 250,
         maxheight: 250,
-        resizable: false,
-        fullscreenable: false,
+        resizable: true,
+        // fullscreenable: false,
         title: "Quiz Genie",
-        'use-content-size': true,
+        // 'use-content-size': true,
         // center:true,
     });
 
