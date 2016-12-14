@@ -5,6 +5,8 @@
 
 import path from 'path';
 import url from 'url';
+import fs from 'fs';
+import markdownpdf from 'markdown-pdf';
 import { app, Menu, ipcMain } from 'electron';
 import { devMenuTemplate } from './menu/dev_menu_template';
 import { editMenuTemplate } from './menu/edit_menu_template';
@@ -14,20 +16,44 @@ import createWindow from './helpers/window';
 // in config/env_xxx.json file.
 import env from './env';
 
-// var ipc = require('ipc');
-
-// ipc.on('close-main-window', function () {
-//     app.quit();
-// });
-
-// const {ipc} = require('electron')
 ipcMain.on('close-main-window', (event, arg) => {
     app.quit();
 })
 
+
+function readFiles(dirname, onFileContent, onError) {
+    // TODO: Make syncrhonous
+    fs.readdir(dirname, function(err, filenames) {
+        if (err) {
+            onError(err);
+            return;
+        }
+        filenames.forEach(function(filename) {
+            fs.readFile(path.join(dirname, filename), 'utf-8', function(err, content) {
+                if (err) {
+                    onError(err);
+                    return;
+                }
+                onFileContent(filename, content);
+            });
+        });
+    });
+}
+
 ipcMain.on('gen-tests', (event, inDir, outDir, numTsts) => {
     console.log(inDir, outDir, numTsts);
-    event.sender.send('gen-tests-done', 'Tests generated')
+
+    var questions = [];
+
+    // Read the files
+    readFiles(inDir, (filename, content) => {
+        questions.push(content);
+    }, function(err) {
+        throw err;
+    });
+
+         event.sender.send('gen-tests-done', 'Tests generated');
+   
 })
 
 
