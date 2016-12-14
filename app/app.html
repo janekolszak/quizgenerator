@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Electron Boilerplate</title>
+    <title>Quiz Genie</title>
     <link href="stylesheets/main.css" rel="stylesheet" type="text/css">
     <link href="stylesheets/photon.min.css" rel="stylesheet" type="text/css">
     <script src="helpers/context_menu.js"></script>
@@ -12,30 +12,37 @@
 </head>
 
 <body>
-    <!-- Wrap your entire app inside .window -->
     <div class="window">
-        <!-- Your app's content goes inside .window-content -->
         <div class="window-content">
             <div class="padded-more">
-                <button id="inDir" class="very-sweet-looking">Open</button>
-                <input id="inDirInput" type="file" style="display: none" webkitdirectory/>
-                <input id="inDirTxt" type="text" disabled>
-
-                <button id="inDir" class="very-sweet-looking">Open</button>
-
+                <div class="form-group">
+                    <label>
+                        <button id="inDirBtn" class="very-sweet-looking">Input Dir</button>
+                    </label>
+                    <input id="inDirTxt" class="form-control" type="text" disabled>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <button id="outDirBtn" class="very-sweet-looking">Output Dir</button>
+                    </label>
+                    <input id="outDirTxt" class="form-control" type="text" disabled>
+                </div>
             </div>
         </div>
+        <footer class="toolbar toolbar-footer">
+            <div class="toolbar-actions">
+                <button class="btn btn-default">
+                    Cancel
+                </button>
+                <button class="btn btn-primary pull-right">
+                    OK
+                </button>
+            </div>
+        </footer>
     </div>
     </hr>
-    <!--     <div class="container">
-        <h1 id="greet"></h1>
-        <p class="subtitle">
-            Welcome to <a href="http://electron.atom.io" class="js-external-link">Electron</a> app running on this magnificent <strong id="platform-info"></strong> machine.
-        </p>
-        <p class="subtitle">
-            You are in <strong id="env-name"></strong> environment.
-        </p>
-    </div> -->
 </body>
+
+</html>
 
 </html>

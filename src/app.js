@@ -17,15 +17,23 @@
 // // here files like it is node.js! Welcome to Electron world :)
 // console.log('The author of this app is:', appDir.read('package.json', 'json').author);
 
+
+import { remote } from 'electron';
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('inDir').addEventListener('click', _ => {
-        document.getElementById('inDirInput').click()
+    document.getElementById('inDirBtn').addEventListener('click', _ => {
+        remote.dialog.showOpenDialog(remote.getCurrentWindow(), { properties: ['openDirectory'] },
+            files => {
+                document.getElementById('inDirTxt').value = files[0];
+            });
     });
 
-    document.getElementById('inDirInput').onchange = function(evt) {
-    	// TODO: Check for undefined
-        document.getElementById('inDirTxt').value = evt.target.files[0].name;
-    };
-
-
+    document.getElementById('outDirBtn').addEventListener('click', _ => {
+        remote.dialog.showOpenDialog(remote.getCurrentWindow(), { properties: ['openDirectory'] },
+            files => {
+                document.getElementById('outDirTxt').value = files[0];
+            });
+    });
 });

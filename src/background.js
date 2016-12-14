@@ -36,9 +36,16 @@ app.on('ready', function () {
     // setApplicationMenu();
 
     var mainWindow = createWindow('main', {
-        width: 400,
-        height: 200,
-        // resizable: false,
+        width: 330,
+        minwidth: 330,
+        maxwidth: 330,
+        height: 250,
+        minheight: 250,
+        maxheight: 250,
+        resizable: false,
+        fullscreenable: false,
+        title: "Quiz Genie",
+        center:true,
     });
 
     mainWindow.loadURL(url.format({
@@ -50,9 +57,9 @@ app.on('ready', function () {
     mainWindow.setMenu(null);
 
 
-    if (env.name === 'development') {
-        mainWindow.openDevTools();
-    }
+    // if (env.name === 'development') {
+    //     mainWindow.openDevTools();
+    // }
 });
 
 app.on('window-all-closed', function () {
