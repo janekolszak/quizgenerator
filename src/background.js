@@ -45,8 +45,12 @@ app.on('ready', function () {
         resizable: false,
         fullscreenable: false,
         title: "Quiz Genie",
-        center:true,
+        'use-content-size': true,
+        // center:true,
     });
+
+    mainWindow.setMenu(null);
+    // mainWindow.setSize(300,300);
 
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'app.html'),
@@ -54,7 +58,6 @@ app.on('ready', function () {
         slashes: true
     }));
 
-    mainWindow.setMenu(null);
 
 
     // if (env.name === 'development') {
