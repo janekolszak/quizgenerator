@@ -18,9 +18,7 @@
 // console.log('The author of this app is:', appDir.read('package.json', 'json').author);
 
 
-import { remote } from 'electron';
-
-
+import { remote, ipcRenderer } from 'electron';
 
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('inDirBtn').addEventListener('click', _ => {
@@ -35,5 +33,9 @@ document.addEventListener('DOMContentLoaded', function() {
             files => {
                 document.getElementById('outDirTxt').value = files[0];
             });
+    });
+
+    document.getElementById('quitBtn').addEventListener('click', _ => {
+        ipcRenderer.send('close-main-window');
     });
 });

@@ -5,7 +5,7 @@
 
 import path from 'path';
 import url from 'url';
-import { app, Menu } from 'electron';
+import { app, Menu, ipcMain } from 'electron';
 import { devMenuTemplate } from './menu/dev_menu_template';
 import { editMenuTemplate } from './menu/edit_menu_template';
 import createWindow from './helpers/window';
@@ -14,9 +14,22 @@ import createWindow from './helpers/window';
 // in config/env_xxx.json file.
 import env from './env';
 
+// var ipc = require('ipc');
+
+// ipc.on('close-main-window', function () {
+//     app.quit();
+// });
+
+// const {ipc} = require('electron')
+ipcMain.on('close-main-window', (event, arg) => {
+    app.quit();
+})
+
+
+
 var mainWindow;
 
-var setApplicationMenu = function () {
+var setApplicationMenu = function() {
     var menus = [editMenuTemplate];
     if (env.name !== 'production') {
         menus.push(devMenuTemplate);
@@ -32,7 +45,7 @@ if (env.name !== 'production') {
     app.setPath('userData', userDataPath + ' (' + env.name + ')');
 }
 
-app.on('ready', function () {
+app.on('ready', function() {
     // setApplicationMenu();
 
     var mainWindow = createWindow('main', {
@@ -65,6 +78,6 @@ app.on('ready', function () {
     // }
 });
 
-app.on('window-all-closed', function () {
+app.on('window-all-closed', function() {
     app.quit();
 });
