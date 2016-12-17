@@ -21,40 +21,43 @@ ipcMain.on('close-main-window', (event, arg) => {
 })
 
 
-function readFiles(dirname, onFileContent, onError) {
-    fs.readdir(dirname, function(err, filenames) {
-        if (err) {
-            onError(err);
-            return;
-        }
-        filenames.forEach(function(filename) {
-            fs.readFile(path.join(dirname, filename), 'utf-8', function(err, content) {
-                if (err) {
-                    onError(err);
-                    return;
-                }
-                onFileContent(filename, content);
-            });
-        });
-    });
+/**
+ * Randomize array element order in-place.
+ * Using Durstenfeld shuffle algorithm.
+ */
+function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
 }
 
-ipcMain.on('gen-tests', (event, inDir, outDir, numTsts) => {
+function shuffleQuestions(questions) {
+    for (var i = 0; i < questions.length; i++) {
+        shuffleArray(questions[i].answers);
+    }
+    shuffleArray(questions);
+}
+
+function getQuestions(inDir) {
     var questions = [];
 
-    // Read the files
-    readFiles(inDir, (filename, content) => {
-        var ext = path.extname(filename);
-        if (ext !== ".md" && ext !== ".txt") {
-            return
+    var filenames = fs.readdirSync(inDir);
+    for (var i = 0; i < filenames.length; i++) {
+        var ext = path.extname(filenames[i]);
+        if ((ext !== ".md" && ext !== ".txt") || filenames[i] === "header.md") {
+            continue;
         }
-
+        var content = fs.readFileSync(path.join(inDir, filenames[i]), 'utf-8');
         var lines = content.split(/\r?\n/);
 
         // Clean up comments and empty lines
-        for (var i = lines.length - 1; i >= 0; i--) {
-            if (!lines[i].trim() || lines[i].charAt(0) === "#") {
-                lines.splice(i, 1);
+        for (var j = lines.length - 1; j >= 0; j--) {
+            if (!lines[j].trim() || lines[j].charAt(0) === "#") {
+                lines.splice(j, 1);
             }
         }
 
@@ -65,15 +68,49 @@ ipcMain.on('gen-tests', (event, inDir, outDir, numTsts) => {
         }
         questions.push(question);
 
+    }
 
-    }, function(err) {
-        event.sender.send('gen-tests-done', 'Failed to generate tests: ' + err);
-    });
+    return questions;
+}
 
+function question2Md(question) {
+    var str = question.text;
+    str += '\n';
+    str += question.answers.join('\n');
+    return str;
+}
+
+function getTest(questions, header) {
+    var test = ""
+    test += header;
+    for (var i = 0; i < questions.length; i++) {
+        test += question2Md(questions[i]);
+        test += '\n';
+        test += '\n';
+    }
+    return test;
+}
+
+function getHeader(inDir) {
+    var headerPath = path.join(inDir, "header.md");
+    if (fs.existsSync(headerPath)) {
+        return fs.readFileSync(headerPath, 'utf-8');
+    }
+    return ""
+}
+
+ipcMain.on('gen-tests', (event, inDir, outDir, numTsts) => {
+    var questions = getQuestions(inDir);
+    var header = getHeader(inDir);
+
+    for (var i = 1; i <= numTsts; ++i) {
+        shuffleQuestions(questions);
+        markdownpdf().from.string(getTest(questions, header)).to(path.join(outDir, i + ".pdf"), function() {
+            console.log("Done")
+        });
+    }
     event.sender.send('gen-tests-done', 'Tests generated');
 })
-
-
 
 var mainWindow;
 
