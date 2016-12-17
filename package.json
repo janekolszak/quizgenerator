@@ -1,11 +1,11 @@
 {
-  "name": "electron-boilerplate",
-  "productName": "Quiz Genie",
-  "description": "Starter for your Electron application",
-  "version": "0.0.0",
-  "author": "Mr. Gumby <mr.gumby@example.com>",
-  "copyright": "© 2016, Gumby inc.",
-  "homepage": "http://example.com",
+  "name": "quiz-generator",
+  "productName": "Quiz Generator",
+  "description": "Simple Quiz Generator",
+  "version": "1.0.0",
+  "author": "Jan Olszak",
+  "copyright": "© 2016, Jan Olszak",
+  "homepage": "https://github.com/janekolszak/quizgenerator",
   "license": "MIT",
   "main": "app/background.js",
   "build": {
