@@ -124,10 +124,10 @@ app.on('ready', function() {
         width: 330,
         minwidth: 330,
         maxwidth: 330,
-        height: 250,
-        minheight: 250,
-        maxheight: 250,
-        resizable: true,
+        height: 300,
+        minheight: 300,
+        maxheight: 300,
+        resizable: false,
         fullscreenable: false,
         title: "Quiz Generator",
         'use-content-size': true,
@@ -135,7 +135,7 @@ app.on('ready', function() {
     });
 
     mainWindow.setMenu(null);
-    // mainWindow.setSize(300,300);
+    mainWindow.setSize(300,300);
 
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'app.html'),
