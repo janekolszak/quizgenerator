@@ -8,8 +8,6 @@ import url from 'url';
 import fs from 'fs';
 import markdownpdf from 'markdown-pdf';
 import { app, Menu, ipcMain } from 'electron';
-import { devMenuTemplate } from './menu/dev_menu_template';
-import { editMenuTemplate } from './menu/edit_menu_template';
 import createWindow from './helpers/window';
 
 // Special module holding environment variables which you declared
@@ -19,7 +17,6 @@ import env from './env';
 ipcMain.on('close-main-window', (event, arg) => {
     app.quit();
 })
-
 
 /**
  * Randomize array element order in-place.
@@ -114,14 +111,6 @@ ipcMain.on('gen-tests', (event, inDir, outDir, numTsts) => {
 
 var mainWindow;
 
-var setApplicationMenu = function() {
-    var menus = [editMenuTemplate];
-    if (env.name !== 'production') {
-        menus.push(devMenuTemplate);
-    }
-    Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
-};
-
 // Save userData in separate folders for each environment.
 // Thanks to this you can use production and development versions of the app
 // on same machine like those are two separate apps.
@@ -131,8 +120,6 @@ if (env.name !== 'production') {
 }
 
 app.on('ready', function() {
-    // setApplicationMenu();
-
     var mainWindow = createWindow('main', {
         width: 330,
         minwidth: 330,
@@ -141,10 +128,10 @@ app.on('ready', function() {
         minheight: 250,
         maxheight: 250,
         resizable: true,
-        // fullscreenable: false,
-        title: "Quiz Genie",
-        // 'use-content-size': true,
-        // center:true,
+        fullscreenable: false,
+        title: "Quiz Generator",
+        'use-content-size': true,
+        center:true,
     });
 
     mainWindow.setMenu(null);
