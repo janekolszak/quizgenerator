@@ -22,7 +22,6 @@ ipcMain.on('close-main-window', (event, arg) => {
 
 
 function readFiles(dirname, onFileContent, onError) {
-    // TODO: Make syncrhonous
     fs.readdir(dirname, function(err, filenames) {
         if (err) {
             onError(err);
@@ -43,17 +42,29 @@ function readFiles(dirname, onFileContent, onError) {
 ipcMain.on('gen-tests', (event, inDir, outDir, numTsts) => {
     console.log(inDir, outDir, numTsts);
 
+
     var questions = [];
 
     // Read the files
     readFiles(inDir, (filename, content) => {
-        questions.push(content);
+        var ext = path.extname(filename);
+        if (ext !== ".md" && ext !== ".txt") {
+            return
+        }
+
+        var lines = content.split(/\r?\n/);
+        console.log(lines.slice(1, lines.length));
+
+        var question = {
+            text: lines[0],
+            answers: lines.slice(1, lines.length)
+        }
+        questions.push(question);
     }, function(err) {
-        throw err;
+        event.sender.send('gen-tests-done', 'Failed to generate tests: ' + err);
     });
 
-         event.sender.send('gen-tests-done', 'Tests generated');
-   
+    event.sender.send('gen-tests-done', 'Tests generated');
 })
 
 
