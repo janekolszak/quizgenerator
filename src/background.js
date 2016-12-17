@@ -40,9 +40,6 @@ function readFiles(dirname, onFileContent, onError) {
 }
 
 ipcMain.on('gen-tests', (event, inDir, outDir, numTsts) => {
-    console.log(inDir, outDir, numTsts);
-
-
     var questions = [];
 
     // Read the files
@@ -53,13 +50,22 @@ ipcMain.on('gen-tests', (event, inDir, outDir, numTsts) => {
         }
 
         var lines = content.split(/\r?\n/);
-        console.log(lines.slice(1, lines.length));
 
+        // Clean up comments and empty lines
+        for (var i = lines.length - 1; i >= 0; i--) {
+            if (!lines[i].trim() || lines[i].charAt(0) === "#") {
+                lines.splice(i, 1);
+            }
+        }
+
+        // Add to questions array
         var question = {
             text: lines[0],
             answers: lines.slice(1, lines.length)
         }
         questions.push(question);
+
+
     }, function(err) {
         event.sender.send('gen-tests-done', 'Failed to generate tests: ' + err);
     });
