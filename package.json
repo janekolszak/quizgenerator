@@ -7,6 +7,7 @@
   "copyright": "© 2016, Jan Olszak",
   "homepage": "https://github.com/janekolszak/quizgenerator",
   "license": "MIT",
+  "category": "Game",
   "main": "app/background.js",
   "build": {
     "appId": "com.example.electron-boilerplate",
@@ -35,7 +36,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "electron": "^1.4.7",
-    "electron-builder": "^8.6.0",
+    "electron-builder": "^19.22.1",
     "electron-mocha": "^3.0.0",
     "gulp": "^3.9.0",
     "gulp-batch": "^1.0.5",
